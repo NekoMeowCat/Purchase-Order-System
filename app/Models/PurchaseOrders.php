@@ -35,4 +35,9 @@ class PurchaseOrders extends ApprovableModel
     {
         return $this->hasMany(PurchaseOrderItems::class);
     }
+
+    public function processApprovalFlowSteps()
+    {
+        return $this->hasMany(ProcessApprovalFlowStep::class, 'process_approval_flow_id', 'id');
+    }
 }

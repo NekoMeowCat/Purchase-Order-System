@@ -10,16 +10,15 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Actions\ActionGroup;
-use EightyNine\Approvals\Tables\Columns\CommentsColumn;
+use App\Models\User;
+use RingleSoft\LaravelProcessApproval\Models\ProcessApproval;
+use RingleSoft\LaravelProcessApproval\Traits\Approvable as TraitsApprovable;
 
 class PurchaseOrdersResource extends Resource
 {
     protected static ?string $model = PurchaseOrders::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-clipboard-document-list';
 
     public static function form(Form $form): Form
     {
@@ -89,6 +88,10 @@ class PurchaseOrdersResource extends Resource
                     //     Tables\Actions\ViewAction::make()
                     // ])
                 ),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted()),
+
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

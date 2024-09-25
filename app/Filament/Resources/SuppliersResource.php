@@ -10,35 +10,45 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Section;
 
 class SuppliersResource extends Resource
 {
     protected static ?string $model = Suppliers::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-user-group';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('contact_person')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('address')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
+                Forms\Components\Section::make('Contact Details')
+                    ->schema([
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Supplier Name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('contact_person')
+                                    ->label('Contact Person')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('phone')
+                                    ->label('Contact No.')
+                                    ->tel()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('email')
+                                    ->email()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('address')
+                                    ->maxLength(65535)
+                                    ->columnSpanFull(),
+                            ]),
+                    ]),
             ]);
     }
+
+
 
     public static function table(Table $table): Table
     {
