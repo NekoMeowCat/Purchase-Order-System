@@ -32,10 +32,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->favicon(asset('heroicon-s-user-group'))
+            // ->brandLogo(asset('images/logo.jpg'))
+            // ->brandLogoHeight('3rem')
             // ->profile()
-            ->colors([
-                'primary' => Color::Amber,
-            ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 \EightyNine\Approvals\ApprovalPlugin::make(),
@@ -85,6 +85,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->colors([
+                'primary' => 'rgb(99, 102, 241)',
+            ])
+            ->viteTheme('resources/css/filament/admin/theme.css');
     }
 }

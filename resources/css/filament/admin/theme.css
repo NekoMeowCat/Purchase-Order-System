@@ -1,0 +1,15 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+
+
+.fi-header-heading
+{
+    @apply text-blue-600;
+}
+
+.fi-section 
+{
+    @apply rounded-md;
+}
