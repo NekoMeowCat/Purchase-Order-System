@@ -5,6 +5,16 @@
         <!-- Form to wrap the inputs and handle submission -->
         <form wire:submit.prevent="save">
             <input type="hidden" name="po_date" wire:model.defer="po_date" value="{{ date('Y-m-d') }}">
+            <div class="flex flex-col mb-4">
+                <label for="po_number" class="text-sm font-medium text-gray-700">PO Number</label>
+                <input
+                    type="text"
+                    id="po_number"
+                    wire:model.defer="po_number"
+                    class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3"
+                    readonly>
+            </div>
+
             <section class="overflow-x-auto" x-data="{
                 rows: @entangle('rows'),
                 get sub_total() {
@@ -74,6 +84,8 @@
                                         @input="row.total = parseFloat((row.quantity * row.unitPrice).toFixed(2)) || 0"
                                         wire:model.defer="rows[index].quantity"
                                         class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+
+
                                 </td>
                                 <!-- Input for unit price -->
                                 <td class="whitespace-nowrap px-1 w-24">

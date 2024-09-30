@@ -17,8 +17,10 @@ class PurchaseOrders extends ApprovableModel
         'department',
         'description',
         'unit_price',
+        'quantity',
         'total',
         'sub_total',
+        'po_number',
         'tax',
         'over_all_total',
         'po_date',
@@ -33,7 +35,7 @@ class PurchaseOrders extends ApprovableModel
 
     public function items()
     {
-        return $this->hasMany(PurchaseOrderItems::class);
+        return $this->hasMany(PurchaseOrderItems::class, 'purchase_order_id');
     }
 
     public function processApprovalFlowSteps()

@@ -24,8 +24,11 @@ class CustomCreatePO extends Page implements HasForms
 
     public $rows = [];
     public $sub_total = 0;
-    public $tax = 2; // Set the tax value as needed
+    public $tax = 2;
     public $over_all_total = 0;
+
+    public $po_number;
+
 
     public function mount(): void
     {
@@ -39,6 +42,19 @@ class CustomCreatePO extends Page implements HasForms
                 'total' => '',
             ]
         ];
+
+        $this->po_number = $this->generatePoNumber();
+    }
+
+    private function generatePoNumber(): string
+    {
+        // Get the current month abbreviation
+        $monthAbbr = strtoupper(date('M'));
+
+        // Generate a sequence number (you can modify this logic as per your requirements)
+        $sequence = str_pad(rand(0, 999), 2, '0', STR_PAD_LEFT);
+
+        return $monthAbbr . $sequence;
     }
 
     public function save()
@@ -54,11 +70,10 @@ class CustomCreatePO extends Page implements HasForms
         $tax = 2; // Your tax logic
         $over_all_total = $sub_total + $tax;
 
-        // Debugging: Check the values being inserted
         // dd($data, $po_date); // Ensure this shows the correct values before proceeding
 
-        // Save the rows into the database
         foreach ($data as $row) {
+            // dd($this->rows);
             PurchaseOrders::create([
                 'item_no' => $row['itemNo'],
                 'description' => $row['description'],
@@ -68,8 +83,8 @@ class CustomCreatePO extends Page implements HasForms
                 'sub_total' => $sub_total,
                 'tax' => $tax,
                 'over_all_total' => $over_all_total,
-                'po_date' => $po_date, // Include the PO date using Carbon
-                // Add other fields if necessary
+                'po_date' => $po_date,
+                'po_number' => $this->po_number,
             ]);
         }
 
