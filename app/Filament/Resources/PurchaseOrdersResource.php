@@ -5,14 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PurchaseOrdersResource\Pages;
 use App\Filament\Resources\PurchaseOrdersResource\RelationManagers;
 use App\Models\PurchaseOrders;
+use App\Models\PurchaseOrderItems; // Import the model for purchase order items
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use App\Models\User;
-use RingleSoft\LaravelProcessApproval\Models\ProcessApproval;
-use RingleSoft\LaravelProcessApproval\Traits\Approvable as TraitsApprovable;
+use Filament\Notifications\Notification;
+use App\Filament\Pages\PurchaseInvoice;
 
 class PurchaseOrdersResource extends Resource
 {
@@ -78,21 +78,54 @@ class PurchaseOrdersResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                ...\EightyNine\Approvals\Tables\Actions\ApprovalActions::make(
-                    // define your action here that will appear once approval is completed\
-                    Tables\Actions\EditAction::make()
-                        ->hidden(),
-                    // ActionGroup::make([
 
-                    //     Tables\Actions\ViewAction::make()
-                    // ])
-                ),
-                Tables\Actions\EditAction::make()
-                    ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted()),
+            ->actions([
+                Tables\Actions\Action::make('save_to_items')
+                    ->label('Save to Items')
+                    ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && !$record->items_saved)
+                    ->requiresConfirmation()
+                    ->action(function (PurchaseOrders $record) {
+                        // Logic to save the purchase order ID to the purchase_order_items table
+                        \App\Models\PurchaseOrderItems::create(['purchase_order_id' => $record->id]);
+
+                        // Update the record to mark that items have been saved
+                        $record->items_saved = 1; // Set items_saved to 1
+                        $record->save(); // Save the updated record
+
+                        // Display a success notification using Filament's notification system
+                        \Filament\Notifications\Notification::make()
+                            ->title('Success')
+                            ->body('Items have been successfully saved.')
+                            ->success()
+                            ->send();
+                    }),
+
+                // Tables\Actions\ViewAction::make()
+                //     ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && $record->items_saved)
+                //     ->url(fn(PurchaseOrders $record) => route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number]))
+                //     ->openUrlInNewTab(),
+
+                Tables\Actions\ViewAction::make()
+                    // ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && $record->items_saved)
+                    ->visible(
+                        fn(PurchaseOrders $record) =>
+                        $record->isApprovalCompleted() && $record->items_saved && !empty($record->po_number)
+                    )
+                    ->url(
+                        fn(PurchaseOrders $record) =>
+                        route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number])
+                    )
+                    ->openUrlInNewTab(),
+
+
+
 
 
             ])
+
+
+
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -113,6 +146,7 @@ class PurchaseOrdersResource extends Resource
             'index' => Pages\ListPurchaseOrders::route('/'),
             'create' => Pages\CustomCreatePO::route('/create'),
             'edit' => Pages\EditPurchaseOrders::route('/{record}/edit'),
+            // 'po-invoice' => PurchaseInvoice::route('purchase-invoice/{po_number}'),
         ];
     }
 }

@@ -18,6 +18,12 @@ Route::get('/', function () {
     return redirect('/admin/login');
 });
 
+use App\Filament\Pages\PurchaseInvoice;
+
+Route::get('admin/purchase-invoice/{po_number}', PurchaseInvoice::class)
+    ->name('filament.admin.pages.purchase-invoice.custom');
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
