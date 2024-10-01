@@ -57,21 +57,20 @@ class PurchaseOrdersResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('item_no')
+                    ->label('Item Number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('department')
+                Tables\Columns\TextColumn::make('po_number')
+                    ->label('Purchase Number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('unit_price'),
+                Tables\Columns\TextColumn::make('unit_price')
+                    ->label('Unit Price'),
                 Tables\Columns\TextColumn::make('total'),
-                Tables\Columns\TextColumn::make('sub_total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('comment'),
-                Tables\Columns\TextColumn::make('tax')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('over_all_total')
+                    ->label('Final Total')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('comment')
+                    ->label('Rejection Comment'),
                 \EightyNine\Approvals\Tables\Columns\ApprovalStatusColumn::make("approvalStatus.status"),
             ])
             ->defaultSort('created_at', 'desc')

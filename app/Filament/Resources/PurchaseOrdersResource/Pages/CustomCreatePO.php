@@ -5,10 +5,14 @@ namespace App\Filament\Resources\PurchaseOrdersResource\Pages;
 use App\Filament\Resources\PurchaseOrdersResource;
 use Filament\Resources\Pages\Page;
 use App\Models\PurchaseOrders;
+use App\Models\Suppliers;
+use App\Models\Departments;
 use Filament\Notifications\Notification;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Carbon\Carbon;
+use Filament\Forms\Components\Select;
+
 
 
 class CustomCreatePO extends Page implements HasForms
@@ -26,12 +30,17 @@ class CustomCreatePO extends Page implements HasForms
     public $sub_total = 0;
     public $tax = 2;
     public $over_all_total = 0;
-
     public $po_number;
+    public $suppliers;
+    public $departments;
+    public $department_id;
+    public $supplier_id;
 
 
     public function mount(): void
     {
+        $this->suppliers = Suppliers::all();
+        $this->departments = Departments::all();
         // Initialize with one empty row
         $this->rows = [
             [
@@ -73,7 +82,7 @@ class CustomCreatePO extends Page implements HasForms
         // dd($data, $po_date); // Ensure this shows the correct values before proceeding
 
         foreach ($data as $row) {
-            // dd($this->rows);
+            // dd($row);
             PurchaseOrders::create([
                 'item_no' => $row['itemNo'],
                 'description' => $row['description'],
@@ -85,6 +94,8 @@ class CustomCreatePO extends Page implements HasForms
                 'over_all_total' => $over_all_total,
                 'po_date' => $po_date,
                 'po_number' => $this->po_number,
+                'supplier_id' => $this->supplier_id,
+                'department_id' => $this->department_id,
             ]);
         }
 

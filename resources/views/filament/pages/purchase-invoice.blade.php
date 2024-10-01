@@ -59,8 +59,7 @@
                 <div class="w-full">Date: ____________________________________</div>
                 <div class="w-full flex flex-col items-end pr-1">
                     <span class="">____________________________________</span>
-                    <
-                        <span class="text-xs text-gray-500">SUPPLIER(Signature Over Printed Name)</span>
+                    <span class="text-xs text-gray-500">SUPPLIER(Signature Over Printed Name)</span>
                 </div>
             </article>
             <article class="grid grid-cols-3 gap-2 border p-1">
