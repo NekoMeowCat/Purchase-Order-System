@@ -53,4 +53,9 @@ class User extends Authenticatable implements HasAvatar
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function departments()
+    {
+        return $this->hasMany(Departments::class, 'user_in_charge_id');
+    }
 }

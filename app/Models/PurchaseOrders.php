@@ -14,9 +14,10 @@ class PurchaseOrders extends ApprovableModel
     protected $fillable = [
         'item_no',
         'name',
-        'department',
+        'department_id',
         'description',
         'unit_price',
+        'supplier_id',
         'quantity',
         'total',
         'sub_total',
@@ -31,6 +32,11 @@ class PurchaseOrders extends ApprovableModel
     public function supplier()
     {
         return $this->belongsTo(Suppliers::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Departments::class);
     }
 
     public function items()
