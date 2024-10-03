@@ -45,7 +45,7 @@ class DepartmentsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_in_charge_id')
+                Tables\Columns\TextColumn::make('userInCharge.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
@@ -63,7 +63,10 @@ class DepartmentsResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->color('warning'),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

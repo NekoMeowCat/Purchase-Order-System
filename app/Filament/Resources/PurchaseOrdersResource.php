@@ -12,7 +12,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Notifications\Notification;
-use App\Filament\Pages\PurchaseInvoice;
 
 class PurchaseOrdersResource extends Resource
 {
@@ -77,53 +76,55 @@ class PurchaseOrdersResource extends Resource
             ->filters([
                 //
             ])
-
+            ->recordUrl(function ($record) {
+                return Pages\POViewPage::getUrl([$record->po_number]); // Ensure you're passing the po_number
+            })
             ->actions([
-                Tables\Actions\Action::make('save_to_items')
-                    ->label('Save to Items')
-                    ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && !$record->items_saved)
-                    ->requiresConfirmation()
-                    ->action(function (PurchaseOrders $record) {
-                        // Logic to save the purchase order ID to the purchase_order_items table
-                        \App\Models\PurchaseOrderItems::create(['purchase_order_id' => $record->id]);
+                ...\EightyNine\Approvals\Tables\Actions\ApprovalActions::make(
+                    Tables\Actions\Action::make("Done")
+                        ->hidden(),
+                    [
+                        Tables\Actions\EditAction::make()
+                            ->hidden(),
+                        Tables\Actions\ViewAction::make()
+                            ->hidden()
+                    ]
+                ),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('save_to_items')
+                        ->label('Save to Items')
+                        ->icon('heroicon-s-bookmark')
+                        ->color('info')
+                        ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && !$record->items_saved)
+                        ->requiresConfirmation()
+                        ->action(function (PurchaseOrders $record) {
+                            \App\Models\PurchaseOrderItems::create(['purchase_order_id' => $record->id]);
 
-                        // Update the record to mark that items have been saved
-                        $record->items_saved = 1; // Set items_saved to 1
-                        $record->save(); // Save the updated record
+                            $record->items_saved = 1;
+                            $record->save();
 
-                        // Display a success notification using Filament's notification system
-                        \Filament\Notifications\Notification::make()
-                            ->title('Success')
-                            ->body('Items have been successfully saved.')
-                            ->success()
-                            ->send();
-                    }),
+                            \Filament\Notifications\Notification::make()
+                                ->title('Success')
+                                ->body('Items have been successfully saved.')
+                                ->success()
+                                ->send();
+                        }),
 
-                // Tables\Actions\ViewAction::make()
-                //     ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && $record->items_saved)
-                //     ->url(fn(PurchaseOrders $record) => route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number]))
-                //     ->openUrlInNewTab(),
-
-                Tables\Actions\ViewAction::make()
-                    // ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && $record->items_saved)
-                    ->visible(
-                        fn(PurchaseOrders $record) =>
-                        $record->isApprovalCompleted() && $record->items_saved && !empty($record->po_number)
-                    )
-                    ->url(
-                        fn(PurchaseOrders $record) =>
-                        route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number])
-                    )
-                    ->openUrlInNewTab(),
-
-
-
-
-
+                    Tables\Actions\ViewAction::make()
+                        ->label('View Invoice')
+                        ->icon('heroicon-s-document-duplicate')
+                        ->color('success')
+                        ->visible(
+                            fn(PurchaseOrders $record) =>
+                            $record->isApprovalCompleted() && $record->items_saved && !empty($record->po_number)
+                        )
+                        ->url(
+                            fn(PurchaseOrders $record) =>
+                            route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number])
+                        )
+                        ->openUrlInNewTab(),
+                ]),
             ])
-
-
-
 
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -145,6 +146,7 @@ class PurchaseOrdersResource extends Resource
             'index' => Pages\ListPurchaseOrders::route('/'),
             'create' => Pages\CustomCreatePO::route('/create'),
             'edit' => Pages\EditPurchaseOrders::route('/{record}/edit'),
+            'view' => Pages\POViewPage::route('/{po_number}'),
             // 'po-invoice' => PurchaseInvoice::route('purchase-invoice/{po_number}'),
         ];
     }

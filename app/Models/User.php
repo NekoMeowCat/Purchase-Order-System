@@ -17,6 +17,11 @@ class User extends Authenticatable implements HasAvatar
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPanelShield;
 
+    public function getFilamentName(): string
+    {
+        return $this->name;
+    }
+
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->avatar_url ? Storage::url("$this->avatar_url") : null;
