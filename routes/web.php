@@ -23,6 +23,11 @@ use App\Filament\Pages\PurchaseInvoice;
 Route::get('admin/purchase-invoice/{po_number}', PurchaseInvoice::class)
     ->name('filament.admin.pages.purchase-invoice.custom');
 
+use App\Filament\Resources\PurchaseOrdersResource\Pages\POViewPage;
+
+Route::get('/admin/purchase-orders/{id}/view', POViewPage::class)->name('purchase-orders.view');
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
