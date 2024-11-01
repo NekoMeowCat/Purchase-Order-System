@@ -14,7 +14,7 @@
                         type="text"
                         id="pr_number"
                         wire:model.defer="pr_number"
-                        class="mt-1 block w-full border-none placeholder:text-xs text-xs placeholder:text-gray-500 shadow focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3"
+                        class="block w-[10rem] py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                         readonly>
                 </span>
             </div>
@@ -27,7 +27,7 @@
                     <label for="department_id" class="text-sm font-medium text-gray-700 w-[10rem] uppercase">Department/office:</label>
                     <select
                         id="department_id"
-                        class="mt-1 w-[34rem] border-none placeholder:text-xs text-xs placeholder:text-gray-500 shadow focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3"
+                        class="block w-[34rem] py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                         wire:model.defer="department_id"
                         required>
                         <option value="">Select a department</option>
@@ -44,7 +44,7 @@
                         id="prs_date"
                         x-model.number="row.prs_date"
                         wire:model.defer="rows[index].prs_date"
-                        class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                        class="block w-[10rem] py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
                 </span>
             </div>
 
@@ -55,7 +55,7 @@
                     id="budget_code"
                     x-model.number="row.budget_code"
                     wire:model.defer="budget_code"
-                    class="mt-1 block w-1/2 border-none placeholder:text-xs text-xs placeholder:text-gray-500 shadow focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                    class="block w-1/2 py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
             </div>
             <div class="flex items-center space-x-2">
                 <label for="budget_code" class="text-sm font-medium text-gray-700 w-[10rem] uppercase">purpose:</label>
@@ -63,7 +63,7 @@
                     type="text"
                     id="purpose"
                     wire:model.defer="purpose"
-                    class="mt-1 block w-1/2 border-none placeholder:text-xs text-xs placeholder:text-gray-500 shadow focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                    class="block w-1/2 py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
             </div>
             <div class="flex items-center space-x-2">
                 <label for="budget_code" class="text-sm font-medium text-gray-700 w-[10rem] uppercase">payee:</label>
@@ -71,7 +71,7 @@
                     type="text"
                     id="payee"
                     wire:model.defer="payee"
-                    class="mt-1 block w-1/2 border-none placeholder:text-xs text-xs placeholder:text-gray-500 shadow focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                    class="block w-1/2 py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
             </div>
 
 
@@ -98,55 +98,46 @@
                             }
                         }
                     }">
-                <table class="min-w-full divide-y divide-gray-200 mb-6 my-4">
+                <table class="min-w-full divide-y divide-gray-200 mb-6 my-4 border">
                     <thead>
-                        <tr>
-                            <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
-                            <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                            <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                            <th class="px-2 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                            <th class="px-2 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Date Required</th>
-                            <th class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                            <th class="border p-2 py-2 border text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
+                            <th class="border p-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="border p-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="border p-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                            <th class="border p-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Date Required</th>
+                            <th class="border p-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <template x-for="(row, index) in rows" :key="index">
                             <tr>
-                                <!-- Input for Quantity -->
-                                <td class="whitespace-nowrap">
-                                    <input
-                                        type="number"
-                                        required
+                                <td class="border w-10">
+                                    <input type="number"
+                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                         x-model.number="row.quantity"
                                         @input="row.total = parseFloat((row.quantity * row.amount).toFixed(2)) || 0"
                                         wire:model.defer="rows[index].quantity"
-                                        class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                                        required />
                                 </td>
-
-                                <!-- Input for Unit -->
-                                <td class="whitespace-nowrap w-24">
-                                    <input
+                                <td class="border w-20">
+                                    <input type="number"
+                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                         type="number"
                                         required
                                         x-model.number="row.unit_no"
                                         x-model="row.unit_no"
-                                        wire:model.defer="rows[index].unit_no"
-                                        class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                                        wire:model.defer="rows[index].unit_no" />
                                 </td>
-
-                                <!-- Input for Description -->
-                                <td class="whitespace-nowrap w-[45rem]">
-                                    <input
-                                        type="text"
-                                        required
+                                <td class="border w-[30rem]">
+                                    <input type="text"
+                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                         x-model="row.description"
                                         wire:model.defer="rows[index].description"
-                                        class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                                        required />
                                 </td>
-
-                                <!-- Input for Amount -->
-                                <td class="whitespace-nowrap w-24">
+                                <td class="border w-24">
                                     <input
                                         type="number"
                                         step="any"
@@ -154,45 +145,43 @@
                                         x-model.number="row.amount"
                                         @input="row.total = parseFloat((row.quantity * row.amount).toFixed(2)) || 0"
                                         wire:model.defer="rows[index].amount"
-                                        class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200" />
                                 </td>
-
-                                <!-- Input for Total -->
-                                <td class="whitespace-nowrap w-[10rem] text-right">
-                                    <input
-                                        type="number"
+                                <td class="border w-[5rem] text-right">
+                                    <input type="number"
+                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                         step="0.01"
                                         min="0"
                                         x-model.number="row.total"
-                                        readonly
-                                        class="mt-1 text-right block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3 bg-gray-100">
+                                        readonly />
                                 </td>
-
-                                <!-- Input for Date Required -->
-                                <td class="whitespace-nowrap text-right">
+                                <td class="border text-right">
                                     <input
                                         type="date"
                                         x-model="row.date_required"
                                         wire:model.defer="rows[index].date_required"
-                                        class="mt-1 block w-full border border-gray-300 placeholder:text-xs text-xs placeholder:text-gray-500 shadow-sm focus:ring-indigo-100 focus:border-indigo-500 sm:text-sm py-3">
+                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200" />
                                 </td>
-
-                                <!-- Actions -->
-                                <td class="whitespace-nowrap flex justify-center space-x-1">
+                                <td class="border flex justify-center space-x-1">
                                     <button
                                         @click="addRow()"
                                         type="button"
-                                        class="text-white bg-[#262261] px-2 my-2 text-lg font-semibold border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:bg-blue-900">
-                                        +
+                                        class="text-white w-[1.5rem] bg-[#262261] text-lg font-semibold border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:bg-blue-900">
+                                        <span class="flex justify-center items-center">
+                                            +
+                                        </span>
                                     </button>
                                     <button
                                         @click="removeRow(index)"
                                         type="button"
-                                        class="text-white bg-[#EE4036] px-2 my-2 text-lg font-semibold border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 hover:bg-red-600">
-                                        -
+                                        class="text-white w-[1.5rem] bg-[#262261] text-lg font-semibold border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:bg-blue-900">
+                                        <span class="flex justify-center items-center">
+                                            -
+                                        </span>
                                     </button>
                                 </td>
                             </tr>
+
                         </template>
                     </tbody>
                 </table>
