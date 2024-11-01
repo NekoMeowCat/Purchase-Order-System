@@ -13,89 +13,94 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Carbon\Carbon;
 use Filament\Forms\Components\Select;
 
-
-
 class CustomCreatePO extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected ?string $heading = 'Purchase Order';
-    protected static ?string $breadcrumb = "Purchase Order Application";
-
+    protected ?string $heading = 'Purchase Request';
+    protected static ?string $breadcrumb = "PRS";
+    protected static ?string $title = 'Purchase Request';
     protected static string $resource = PurchaseOrdersResource::class;
-
     protected static string $view = 'filament.resources.purchase-orders-resource.pages.custom-create-p-o';
 
     public $rows = [];
-    public $sub_total = 0;
-    public $tax = 2;
     public $over_all_total = 0;
-    public $po_number;
+    public $pr_number;
+    public $date_required;
     public $suppliers;
     public $departments;
     public $department_id;
     public $supplier_id;
-
+    public $budget_code;
+    public $purpose;
+    public $payee;
 
     public function mount(): void
     {
         $this->suppliers = Suppliers::all();
         $this->departments = Departments::all();
-        // Initialize with one empty row
+
         $this->rows = [
             [
-                'itemNo' => '',
-                'description' => '',
                 'quantity' => '',
-                'unitPrice' => '',
+                'unit_no' => '',
+                'description' => '',
+                'amount' => '',
+                'prs_date' => '',
                 'total' => '',
+                'budget_code' => '',
+                'date_required' => '',
             ]
         ];
 
-        $this->po_number = $this->generatePoNumber();
+        $this->pr_number = $this->generatePoNumber();
     }
 
     private function generatePoNumber(): string
     {
-        // Get the current month abbreviation
         $monthAbbr = strtoupper(date('M'));
+        $year = date('y');
+        $nextSequence = $this->getNextSequenceNumber();
+        $sequence = str_pad($nextSequence, 5, '0', STR_PAD_LEFT);
 
-        // Generate a sequence number (you can modify this logic as per your requirements)
-        $sequence = str_pad(rand(0, 999), 2, '0', STR_PAD_LEFT);
+        return $monthAbbr . $year . $sequence;
+    }
 
-        return $monthAbbr . $sequence;
+    private function getNextSequenceNumber(): int
+    {
+        $monthAbbr = strtoupper(date('M'));
+        $year = date('y');
+
+        $lastPoNumber = PurchaseOrders::where('pr_number', 'like', "{$monthAbbr}{$year}%")
+            ->orderBy('created_at', 'desc')
+            ->first()
+            ?->pr_number;
+
+        return $lastPoNumber ? (int)substr($lastPoNumber, -5) + 1 : 1;
     }
 
     public function save()
     {
-        // Get the current PO date using Carbon
-        $po_date = Carbon::now()->format('Y-m-d'); // Change format if needed
-
-        // Here, $this->rows will contain the data from each row
+        $prs_date = Carbon::now()->format('Y-m-d');
         $data = $this->rows;
 
-        // Calculate overall totals
-        $sub_total = collect($data)->sum('total');
-        $tax = 2; // Your tax logic
-        $over_all_total = $sub_total + $tax;
-
-        // dd($data, $po_date); // Ensure this shows the correct values before proceeding
+        $over_all_total = collect($data)->sum('total');
 
         foreach ($data as $row) {
-            // dd($row);
             PurchaseOrders::create([
-                'item_no' => $row['itemNo'],
-                'description' => $row['description'],
                 'quantity' => $row['quantity'],
-                'unit_price' => $row['unitPrice'],
+                'unit_no' => $row['unit_no'],
+                'description' => $row['description'],
+                'amount' => $row['amount'],
                 'total' => $row['total'],
-                'sub_total' => $sub_total,
-                'tax' => $tax,
                 'over_all_total' => $over_all_total,
-                'po_date' => $po_date,
-                'po_number' => $this->po_number,
-                'supplier_id' => $this->supplier_id,
+                'prs_date' => $prs_date,
+                'pr_number' => $this->pr_number,
+                'budget_code' => $this->budget_code,
+                'purpose' => $this->purpose,
+                'payee' => $this->payee,
                 'department_id' => $this->department_id,
+                'date_required' => $row['date_required'],
             ]);
         }
 

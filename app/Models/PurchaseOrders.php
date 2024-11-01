@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use EightyNine\Approvals\Models\ApprovableModel;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+
 
 
 class PurchaseOrders extends ApprovableModel
@@ -12,22 +15,29 @@ class PurchaseOrders extends ApprovableModel
     use HasFactory;
 
     protected $fillable = [
-        'item_no',
-        'name',
+        'unit_no',
         'department_id',
         'description',
         'unit_price',
         'supplier_id',
         'quantity',
         'total',
-        'sub_total',
-        'po_number',
-        'tax',
+        'amount',
+        'budget_code',
+        'purpose',
+        'payee',
+        'pr_number',
         'over_all_total',
-        'po_date',
+        'prs_date',
+        'date_required',
         'comment',
         'rejected_by',
     ];
+
+    public function getFormattedDateRequiredAttribute()
+    {
+        return Carbon::parse($this->date_required)->format('F j, Y');
+    }
 
     public function supplier()
     {
@@ -39,9 +49,9 @@ class PurchaseOrders extends ApprovableModel
         return $this->belongsTo(Departments::class);
     }
 
-    public function items()
+    public function purchaseOrderItems()
     {
-        return $this->hasMany(PurchaseOrderItems::class, 'purchase_order_id');
+        return $this->hasMany(PurchaseOrderItems::class, 'prs_id'); // Adjust 'prs_id' if necessary
     }
 
     public function processApprovalFlowSteps()

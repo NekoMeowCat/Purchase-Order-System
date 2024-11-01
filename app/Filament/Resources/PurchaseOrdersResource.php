@@ -17,6 +17,10 @@ class PurchaseOrdersResource extends Resource
 {
     protected static ?string $model = PurchaseOrders::class;
 
+    protected static ?string $navigationLabel = 'Purchase Request';
+
+    protected static ?string $breadcrumb = 'Purchase Request';
+
     protected static ?string $navigationIcon = 'heroicon-s-clipboard-document-list';
 
     public static function form(Form $form): Form
@@ -55,21 +59,26 @@ class PurchaseOrdersResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('item_no')
-                    ->label('Item Number')
+                Tables\Columns\TextColumn::make('unit_no')
+                    ->label('Unit')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('po_number')
+                Tables\Columns\TextColumn::make('pr_number')
                     ->label('Purchase Number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('unit_price')
-                    ->label('Unit Price'),
+                Tables\Columns\TextColumn::make('budget_code')
+                    ->label('Budget Code')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('prs_date')
+                    ->label('Purchase Date')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('prs_date')
+                    ->label('Purchase Date')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('prs_date')
+                    ->label('Purchase Date')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('amount'),
                 Tables\Columns\TextColumn::make('total'),
-                Tables\Columns\TextColumn::make('over_all_total')
-                    ->label('Final Total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('comment')
-                    ->label('Rejection Comment'),
                 \EightyNine\Approvals\Tables\Columns\ApprovalStatusColumn::make("approvalStatus.status"),
             ])
             ->defaultSort('created_at', 'desc')
@@ -77,7 +86,7 @@ class PurchaseOrdersResource extends Resource
                 //
             ])
             ->recordUrl(function ($record) {
-                return Pages\POViewPage::getUrl([$record->po_number]); // Ensure you're passing the po_number
+                return Pages\POViewPage::getUrl([$record->pr_number]); // Ensure you're passing the po_number
             })
             ->actions([
                 ...\EightyNine\Approvals\Tables\Actions\ApprovalActions::make(
@@ -95,10 +104,17 @@ class PurchaseOrdersResource extends Resource
                         ->label('Save to Items')
                         ->icon('heroicon-s-bookmark')
                         ->color('info')
-                        ->visible(fn(PurchaseOrders $record) => $record->isApprovalCompleted() && !$record->items_saved)
+                        ->visible(
+                            fn(PurchaseOrders $record) =>
+                            $record->isApprovalCompleted() &&
+                                !$record->items_saved &&
+                                !\App\Models\PurchaseOrders::where('pr_number', $record->pr_number)
+                                    ->where('items_saved', 1)
+                                    ->exists()
+                        )
                         ->requiresConfirmation()
                         ->action(function (PurchaseOrders $record) {
-                            \App\Models\PurchaseOrderItems::create(['purchase_order_id' => $record->id]);
+                            \App\Models\PurchaseOrderItems::create(['prs_id' => $record->id]);
 
                             $record->items_saved = 1;
                             $record->save();
@@ -110,19 +126,19 @@ class PurchaseOrdersResource extends Resource
                                 ->send();
                         }),
 
-                    Tables\Actions\ViewAction::make()
-                        ->label('View Invoice')
-                        ->icon('heroicon-s-document-duplicate')
-                        ->color('success')
-                        ->visible(
-                            fn(PurchaseOrders $record) =>
-                            $record->isApprovalCompleted() && $record->items_saved && !empty($record->po_number)
-                        )
-                        ->url(
-                            fn(PurchaseOrders $record) =>
-                            route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number])
-                        )
-                        ->openUrlInNewTab(),
+                    // Tables\Actions\ViewAction::make()
+                    //     ->label('View Invoice')
+                    //     ->icon('heroicon-s-document-duplicate')
+                    //     ->color('success')
+                    //     ->visible(
+                    //         fn(PurchaseOrders $record) =>
+                    //         $record->isApprovalCompleted() && $record->items_saved && !empty($record->po_number)
+                    //     )
+                    //     ->url(
+                    //         fn(PurchaseOrders $record) =>
+                    //         route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number])
+                    //     )
+                    //     ->openUrlInNewTab(),
                 ]),
             ])
 
@@ -146,7 +162,7 @@ class PurchaseOrdersResource extends Resource
             'index' => Pages\ListPurchaseOrders::route('/'),
             'create' => Pages\CustomCreatePO::route('/create'),
             'edit' => Pages\EditPurchaseOrders::route('/{record}/edit'),
-            'view' => Pages\POViewPage::route('/{po_number}'),
+            'view' => Pages\POViewPage::route('/{pr_number}'),
             // 'po-invoice' => PurchaseInvoice::route('purchase-invoice/{po_number}'),
         ];
     }

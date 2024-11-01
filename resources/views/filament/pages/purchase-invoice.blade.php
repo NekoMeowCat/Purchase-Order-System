@@ -12,20 +12,33 @@
                 <h1 class="uppercase underline font-medium tracking-tight text-3xl mt-2">purchase order</h1>
             </article>
             <article class="flex min-w-full border h-auto m-2">
-                <div class="flex justify-end w-full">
-                    <p>P.O NO.: {{ $po_number }}</p>
+                <div class="flex justify-end w-full pr-10">
+                    <span class="w-20"> P.O NO. :</span>
+                    <span class="pl-2 font-medium"> OCT2478513</span>
                 </div>
             </article>
             <article class="grid grid-cols-2 gap-2 w-full">
-                <div class="border">Supplier: __________________________________________________________________________</div>
-                <div class="flex justify-end border">Date: _______________________________</div>
+                <div class="border flex">
+                    <span class="bg-green-100 w-20">Supplier: </span>
+                    <span class="ml-2 font-medium">{{ $supplierName }}</span>
+                </div>
+                <div class="flex justify-end border pr-1">
+                    <span class="w-20">Date:</span>
+                    <span class="ml-2 font-medium">{{ date('F j, Y') }}</span>
+                </div>
             </article>
             <article class="flex justify-start w-full">
                 <small class="pl-16 text-slate-500">Please furnish us the following listed hereunder subject to terms and conditions set forth below:</small>
             </article>
             <article class="grid grid-cols-2 gap-2 w-full">
-                <div class="border">Terms: __________________________________________________________________________</div>
-                <div class="flex justify-end border">Date Required: _______________________________</div>
+                <div class="border flex">
+                    <span class="bg-green-100 w-20">Terms:</span>
+                    <span class="ml-2 font-medium">{{ date('F j, Y') }}</span>_
+                </div>
+                <div class="flex justify-start border">
+                    <span class="bg-green-100 w-40">Date Required: </span>
+                    <span class="ml-2 font-medium">{{ $date_required }}</span>
+                </div>
             </article>
         </header>
 
@@ -64,10 +77,16 @@
                     <span class="text-xs text-gray-500">SUPPLIER (Signature Over Printed Name)</span>
                 </div>
             </article>
-            <article class="grid grid-cols-3 gap-2 border p-1">
+            <article class="grid grid-cols-3 gap-x-2 border p-1">
                 <span class="border w-full text-sm text-gray-700">Prepared By:</span>
                 <span class="border w-full text-sm text-gray-700">Certified Funds Available:</span>
                 <span class="border w-full text-sm text-gray-700">Approved By:</span>
+                <span class="border w-full text-sm text-gray-700 text-center mt-10 uppercase font-bold">{{ $positions['PMO Director'] }}</span>
+                <span class="border-b border-black text-center text-sm text-gray-700 mt-10 uppercase font-bold">{{ $positions['Comptroller'] }}</span>
+                <span class="border-b border-black text-center text-sm text-gray-700 mt-10 uppercase font-bold">{{ $positions['VP for Administrative and Student Affairs'] }}</span>
+                <span class="border w-full text-sm text-gray-700 text-center">Director, PMO</span>
+                <span class="border w-full text-sm text-gray-700 text-center">Comptroller</span>
+                <span class="border w-full text-sm text-gray-700 text-center">VP for Administrative and Student Affairs</span>
             </article>
         </section>
     </main>

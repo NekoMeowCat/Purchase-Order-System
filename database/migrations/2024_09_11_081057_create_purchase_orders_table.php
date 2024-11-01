@@ -13,16 +13,23 @@ return new class extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
-            $table->integer('item_no');
-            $table->string('name');
+            $table->string('budget_code')->nullable();
+            $table->string('purpose')->nullable();
+            $table->string('payee')->nullable();
+            $table->string('pr_number');
+            $table->string('quantity');
+            $table->string('unit_no')->nullable();
             $table->text('description');
-            $table->decimal('unit_price', 10, 2);
-            $table->decimal('total', 10, 2);
-            $table->decimal('sub_total', 10, 2);
-            $table->decimal('tax', 10, 2);
-            $table->decimal('over_all_total', 10, 2);
+            $table->decimal('amount', 12, 2);
+            $table->string('date_required')->nullable();
+            $table->string('rejected_by')->nullable();
+            $table->string('comment')->nullable();
+            $table->boolean('items_saved')->default(false);
+            $table->string('prs_date');
+            $table->decimal('total', 12, 2);
+            $table->decimal('over_all_total', 12, 2);
             $table->timestamps();
         });
     }

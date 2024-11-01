@@ -20,7 +20,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
-
+use CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin;
 
 
 class AdminPanelProvider extends PanelProvider
@@ -32,12 +32,15 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->databaseNotifications()
             ->favicon(asset('heroicon-s-user-group'))
             // ->brandLogo(asset('images/logo.jpg'))
             // ->brandLogoHeight('3rem')
             // ->profile()
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                FilamentThemeInspectorPlugin::make()
+                    ->disabled(fn() => ! app()->hasDebugModeEnabled()),
                 \EightyNine\Approvals\ApprovalPlugin::make(),
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
