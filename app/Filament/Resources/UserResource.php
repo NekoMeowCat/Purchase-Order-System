@@ -35,6 +35,9 @@ class UserResource extends Resource
                                 Forms\Components\TextInput::make('email')
                                     ->email()
                                     ->unique(ignoreRecord: true),
+                                Forms\Components\TextInput::make('position')
+                                    ->required()
+                                    ->maxLength(255),
                                 Forms\Components\Select::make('roles')
                                     ->relationship('roles', 'name')
                                     ->preload()
@@ -55,6 +58,8 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('position')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('purchase_orders', function (Blueprint $table) {
-            $table->string('po_date');
+        Schema::table('purchase_order_items', function (Blueprint $table) {
+            $table->renameColumn('unit_price', 'price');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('purchase_orders', function (Blueprint $table) {
+        Schema::table('price_on_purchase_order_items', function (Blueprint $table) {
             //
         });
     }
