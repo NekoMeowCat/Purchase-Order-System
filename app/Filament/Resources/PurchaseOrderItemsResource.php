@@ -84,9 +84,21 @@ class PurchaseOrderItemsResource extends Resource
             ->filters([
                 //
             ])
+            ->recordUrl(function ($record) {
+                // Find the first record with this po_number to get its ID
+                $firstRecord = $record::where('po_number', $record->po_number)->first();
+
+                // Return the URL using the actual record's ID
+                return $firstRecord
+                    ? Pages\InvoiceView::getUrl(['record' => $firstRecord->id])
+                    : null;
+            })
+
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->visible(fn($record) => $record->status === 'Pending'),
+                Tables\Actions\ViewAction::make(),
+
             ])
 
             ->bulkActions([
@@ -109,6 +121,7 @@ class PurchaseOrderItemsResource extends Resource
             'index' => Pages\ListPurchaseOrderItems::route('/'),
             'create' => Pages\CreatePurchaseOrderItems::route('/create'),
             'edit' => Pages\EditPO::route('/{record}/edit'),
+            'view' => Pages\InvoiceView::route('/{record}'),
         ];
     }
 }
