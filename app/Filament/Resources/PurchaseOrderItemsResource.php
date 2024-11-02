@@ -93,14 +93,18 @@ class PurchaseOrderItemsResource extends Resource
                     ? Pages\InvoiceView::getUrl(['record' => $firstRecord->id])
                     : null;
             })
-
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->visible(fn($record) => $record->status === 'Pending'),
-                Tables\Actions\ViewAction::make(),
-
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    // ->visible(fn($record) => $record->status === 'Pending'),
+                    Tables\Actions\ViewAction::make()
+                        ->label('View Invoice')
+                        ->icon('heroicon-s-receipt-refund')
+                        ->color('success')
+                        ->visible(fn($record) => $record->status !== 'Pending')
+                        ->openUrlInNewTab(),
+                ])
             ])
-
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

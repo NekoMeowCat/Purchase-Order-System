@@ -1,6 +1,5 @@
 <x-filament-panels::page>
-
-    {{ $pr_number }}
+    @vite('resources/css/app.css')
     <main class="min-h-screen w-full bg-white rounded-sm shadow-lg p-6">
         <span class="flex justify-end items-end">
             <x-filament::input.wrapper>
@@ -14,12 +13,12 @@
         </span>
         <header class="w-full">
             <article class="flex flex-col items-center w-full border my-6">
-                <span class="capitalize">father saturnino urios university</span>
-                <span class="uppercase font-medium tracking-tight">property & maintenance office</span>
-                <span class="capitalize">Butuan City</span>
+                <span class="capitalize font-bona">father saturnino urios university</span>
+                <span class="uppercase font-bold text-lg tracking-tight font-bona">property & maintenance office</span>
+                <span class="capitalize font-bona">Butuan City</span>
             </article>
             <article class="w-full flex justify-center border mb-2">
-                <span class="uppercase font-medium text-2xl underline">purchase order</span>
+                <span class="uppercase font-bold text-2xl underline font-bona">purchase order</span>
             </article>
         </header>
         <form wire:submit.prevent="submit" class="">
@@ -69,7 +68,6 @@
                             required />
                     </div>
                 </article>
-
             </section>
 
             <section class="my-4">
@@ -91,37 +89,43 @@
                                     class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                     wire:model="rows.{{ $index }}.quantity"
                                     wire:change="updateAmount({{ $index }})"
-                                    required />
+                                    required
+                                    @if($record->status !== 'Pending') disabled @endif />
                             </td>
                             <td class="border w-[30rem]">
                                 <input type="text"
                                     class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                     wire:model="rows.{{ $index }}.description"
-                                    required />
+                                    required
+                                    @if($record->status !== 'Pending') disabled @endif />
                             </td>
                             <td class="border w-[10rem]">
                                 <input type="number"
                                     class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                     wire:model="rows.{{ $index }}.price"
                                     wire:change="updateAmount({{ $index }})"
-                                    required />
+                                    required
+                                    @if($record->status !== 'Pending') disabled @endif />
                             </td>
                             <td class="border w-[10rem] text-right">
                                 <input type="number"
                                     class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
                                     wire:model="rows.{{ $index }}.amount"
-                                    readonly />
+                                    readonly
+                                    @if($record->status !== 'Pending') disabled @endif />
                             </td>
                             <td class="border flex justify-center space-x-0 w-[10rem]">
                                 <button type="button"
                                     wire:click="addRow"
-                                    class="text-white bg-[#262261] px-2 mx-1 text-lg font-semibold border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:bg-blue-900">
+                                    class="text-white bg-[#262261] px-2 mx-1 text-lg font-semibold border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:bg-blue-900"
+                                    @if($record->status !== 'Pending') disabled @endif>
                                     +
                                 </button>
                                 @if(count($rows) > 1)
                                 <button type="button"
                                     wire:click="removeRow({{ $index }})"
-                                    class="text-white bg-[#262261] px-2 mx-1 text-lg font-semibold border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:bg-blue-900">
+                                    class="text-white bg-[#262261] px-2 mx-1 text-lg font-semibold border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:bg-blue-900"
+                                    @if($record->status !== 'Pending') disabled @endif>
                                     -
                                 </button>
                                 @endif
@@ -137,8 +141,6 @@
                     </span>
                 </div>
             </section>
-
-
 
 
             <div class="flex justify-end mt-4">
