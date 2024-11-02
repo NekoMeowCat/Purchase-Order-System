@@ -1,13 +1,36 @@
 <x-filament::page>
+    @vite('resources/css/app.css')
     <main class="min-h-screen w-full bg-white rounded-sm shadow-lg p-6">
+        <div class="flex justify-end w-full">
+            <span class="">
+                <x-filament::badge
+                    :icon="match($record->status) {
+                        'Pending' => 'heroicon-s-exclamation-triangle',
+                        'Approved' => 'heroicon-s-check-circle',
+                        'Out for Delivery' => 'heroicon-s-truck',
+                        'Completed' => 'heroicon-s-shield-check',
+                        default => 'heroicon-s-question-mark-circle' 
+                    }"
+                    icon-position="after"
+                    :color="match($record->status) {
+                    'Pending' => 'danger',
+                    'Approved' => 'warning',
+                    'Out for Delivery' => 'info',
+                    'Completed' => 'success',
+                    default => 'secondary' 
+                }">
+                    {{ $record->status }}
+                </x-filament::badge>
+            </span>
+        </div>
         <header class="block w-full my-5">
             <section class="mb-5">
-                <div class="capitalize flex justify-center font-medium text-lg">father saturnino urios university</div>
-                <div class="uppercase flex justify-center font-bold text-xl">property & maintenance office</div>
-                <span class="capitalize flex justify-center">butuan city</span>
+                <div class="capitalize flex justify-center font-medium text-lg font-bona">father saturnino urios university</div>
+                <div class="uppercase flex justify-center font-bold text-xl font-bona">property & maintenance office</div>
+                <span class="capitalize flex justify-center font-bona">butuan city</span>
             </section>
             <section class="flex justify-center">
-                <span class="uppercase text-2xl font-bold underline">purchase order</span>
+                <span class="uppercase text-2xl font-bona font-bold underline">purchase order</span>
             </section>
             <section class="flex justify-end">
                 <span class="w-[4rem]">P.O #: </span>
@@ -63,11 +86,54 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-right border font-bold">Grand Total:</td>
-                        <td class="text-right border font-bold px-2">{{ $record->related_items->sum('amount') }}</td>
+                        <td class="text-right border font-bold px-2">{{ number_format($record->related_items->sum('amount'), 2) }}</td>
                     </tr>
                 </tfoot>
             </table>
             @endif
+        </section>
+        <section class="w-full flex justify-end my-2">
+            <span class="w-[6rem]">Conforme:</span>
+            <span class="w-[15rem] border-b-2"></span>
+        </section>
+        <section class="flex space-x-2">
+            <span class="">Requested Office/Department:</span>
+            <span class="w-[15rem] border-b-2">{{ $departmentName }}</span>
+        </section>
+        <section class="flex justify-evenly space-x-4">
+            <div class="w-full flex">
+                <span class="w-[5rem]">PRS No:</span>
+                <span class="border-b-2 w-full">{{ $prNumber }}</span>
+            </div>
+            <div class="w-full flex">
+                <span class="w-[3rem]">Date:</span>
+                <span class="border-b-2 w-full"></span>
+            </div>
+            <div class="w-full flex">
+                <span class="border-b-2 w-full"></span>
+            </div>
+        </section>
+        <small class="flex justify-end">
+            <span class="mx-[4rem]">SUPPLIER (Signature over Printed Name)</span>
+        </small>
+        <section class="w-full flex justify-evenly space-x-4">
+            <span class="capitalize w-full">prepared by:</span>
+            <span class="capitalize w-full">certified funds available:</span>
+            <span class="capitalize w-full">approved by:</span>
+        </section>
+        <section class="flex justify-evenly space-x-4 mt-8">
+            <div class="block w-full">
+                <div class=""></div>
+                <div class="text-center border-t-2">Director, PMO</div>
+            </div>
+            <div class="block w-full">
+                <div an class=""></div>
+                <div class="text-center border-t-2">Comptroller</div>
+            </div>
+            <div class="block w-full">
+                <div class=""></div>
+                <div class="text-center border-t-2">VP for Administrative and Students Affair</div>
+            </div>
         </section>
     </main>
 </x-filament::page>
