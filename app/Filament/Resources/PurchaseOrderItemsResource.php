@@ -19,7 +19,9 @@ class PurchaseOrderItemsResource extends Resource
 {
     protected static ?string $model = PurchaseOrderItems::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-arrow-path-rounded-square';
+
+    protected static ?string $navigationLabel = 'Purchase Orders';
 
     public static function form(Form $form): Form
     {
