@@ -24,17 +24,13 @@
             </section>
             <div class="flex items-center justify-between w-full mb-1">
                 <div class="flex items-center space-x-2">
-                    <label for="department_id" class="text-sm font-medium text-gray-700 w-[10rem] uppercase">Department/office:</label>
-                    <select
-                        id="department_id"
+                    <label for="department" class="text-sm font-medium text-gray-700 w-[10rem] uppercase">Department/office:</label>
+                    <input
+                        type="text"
+                        id="department"
+                        value="{{ auth()->user()->department->name }}"
                         class="block w-[34rem] py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-                        wire:model.defer="department_id"
-                        required>
-                        <option value="">Select a department</option>
-                        @foreach (\App\Models\Departments::all() as $department)
-                        <option value="{{ $department->id }}">{{ $department->name }}</option>
-                        @endforeach
-                    </select>
+                        readonly>
                 </div>
 
                 <span class="flex items-center space-x-2">

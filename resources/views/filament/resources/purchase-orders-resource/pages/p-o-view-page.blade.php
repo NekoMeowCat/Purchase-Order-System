@@ -52,7 +52,7 @@
                 <section class="flex items-center justify-between w-full">
                     <div class="flex items-start">
                         <label for="department" class="font-medium w-[7rem]">Department:</label>
-                        <span class="ml-2 w-[15rem] border-b-2 border-gray-400">{{ $departmentName }}</span>
+                        <span class="ml-2 w-[15rem] border-b-2 border-gray-400">{{ $purchaseOrders->first()->department }}</span>
                     </div>
                     <div class="flex items-center mb-2">
                         <label for="prs_date" class="font-medium md:w-[5rem]">PRS Date:</label>

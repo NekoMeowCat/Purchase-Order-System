@@ -29,7 +29,7 @@ class CustomCreatePO extends Page implements HasForms
     public $date_required;
     public $suppliers;
     public $departments;
-    public $department_id;
+    public $department;
     public $supplier_id;
     public $budget_code;
     public $purpose;
@@ -83,7 +83,9 @@ class CustomCreatePO extends Page implements HasForms
     {
         $prs_date = Carbon::now()->format('Y-m-d');
         $data = $this->rows;
+        // $department = auth()->user()->department->name;
 
+        // dd($department);
         $over_all_total = collect($data)->sum('total');
 
         foreach ($data as $row) {
@@ -99,7 +101,7 @@ class CustomCreatePO extends Page implements HasForms
                 'budget_code' => $this->budget_code,
                 'purpose' => $this->purpose,
                 'payee' => $this->payee,
-                'department_id' => $this->department_id,
+                'department' => auth()->user()->department->name,
                 'date_required' => $row['date_required'],
             ]);
         }

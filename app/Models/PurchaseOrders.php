@@ -14,9 +14,13 @@ class PurchaseOrders extends ApprovableModel
 {
     use HasFactory;
 
+    protected $casts = [
+        'attachments' => 'array',
+    ];
+
     protected $fillable = [
         'unit_no',
-        'department_id',
+        // 'department_id',
         'description',
         'unit_price',
         'supplier_id',
@@ -32,6 +36,8 @@ class PurchaseOrders extends ApprovableModel
         'date_required',
         'comment',
         'rejected_by',
+        'attachments',
+        'department',
     ];
 
     public function getFormattedDateRequiredAttribute()
@@ -44,10 +50,7 @@ class PurchaseOrders extends ApprovableModel
         return $this->belongsTo(Suppliers::class);
     }
 
-    public function department()
-    {
-        return $this->belongsTo(Departments::class);
-    }
+
 
     public function purchaseOrderItems()
     {

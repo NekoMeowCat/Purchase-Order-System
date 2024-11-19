@@ -42,12 +42,20 @@ class UserResource extends Resource
                                     ->relationship('roles', 'name')
                                     ->preload()
                                     ->searchable(),
+                                Forms\Components\Select::make('department_id')
+                                    ->label('Department')
+                                    ->relationship('department', 'name')
+                                    ->preload()
+                                    ->searchable(),
                                 Forms\Components\TextInput::make('password')
                                     ->password()
                                     ->required()
                                     ->revealable()
                                     ->dehydrateStateUsing(fn($state) => Hash::make($state))
-                                    ->hiddenOn('edit')
+                                    ->hiddenOn('edit'),
+                                Forms\Components\FileUpload::make('signature')
+                                    ->required()
+                                    ->columnSpanFull(),
                             ])
                     ])
             ]);
@@ -61,6 +69,8 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('position')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('department.name')
+                    ->label('Department'),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles.name')->label('Role')

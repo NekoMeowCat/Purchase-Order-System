@@ -38,6 +38,8 @@ class User extends Authenticatable implements HasAvatar
         'password',
         'avatar_url',
         'position',
+        'department_id',
+        'signature',
     ];
 
     /**
@@ -60,8 +62,8 @@ class User extends Authenticatable implements HasAvatar
         'password' => 'hashed',
     ];
 
-    public function departments()
+    public function department()
     {
-        return $this->hasMany(Departments::class, 'user_in_charge_id');
+        return $this->belongsTo(Departments::class);
     }
 }

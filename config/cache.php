@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_DRIVER', 'redis'),
+    'default' => env('CACHE_DRIVER', 'file'), // Changed from 'redis' to 'file'
 
     /*
     |--------------------------------------------------------------------------
@@ -74,11 +74,7 @@ return [
             ],
         ],
 
-        'redis' => [
-            'driver' => 'redis',
-            'connection' => 'cache',
-            'lock_connection' => 'default',
-        ],
+        // Removed Redis configuration.
 
         'dynamodb' => [
             'driver' => 'dynamodb',

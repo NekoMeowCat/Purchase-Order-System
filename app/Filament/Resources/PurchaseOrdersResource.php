@@ -100,6 +100,32 @@ class PurchaseOrdersResource extends Resource
                     ]
                 ),
                 Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('upload_files')
+                        ->label('Add Attachments')
+                        ->icon('heroicon-s-paper-clip')
+                        ->color('warning')
+                        ->visible(
+                            fn(PurchaseOrders $record) => (auth()->user()->position === 'Dean' || auth()->user()->position === 'Admin') &&
+                                is_null($record->attachments)
+                        )
+                        ->form([
+                            Forms\Components\FileUpload::make('attachments')
+                                ->label('Attachments')
+                                ->multiple()
+                                ->directory('purchase-orders')
+                                ->preserveFilenames()
+                                ->acceptedFileTypes(['application/pdf', 'image/*'])
+                                ->maxSize(5120)
+                        ])
+                        ->action(function (PurchaseOrders $record, array $data): void {
+                            $record->attachments = $data['attachments'];
+                            $record->save();
+
+                            Notification::make()
+                                ->title('Files uploaded successfully')
+                                ->success()
+                                ->send();
+                        }),
                     Tables\Actions\Action::make('save_to_items')
                         ->label('Save to Items')
                         ->icon('heroicon-s-bookmark')
