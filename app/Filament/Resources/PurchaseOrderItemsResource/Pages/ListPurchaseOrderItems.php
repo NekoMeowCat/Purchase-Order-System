@@ -10,10 +10,10 @@ class ListPurchaseOrderItems extends ListRecords
 {
     protected static string $resource = PurchaseOrderItemsResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
+    // protected function getHeaderActions(): array
+    // {
+    //     return [
+    //         Actions\CreateAction::make(),
+    //     ];
+    // }
 }

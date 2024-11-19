@@ -122,9 +122,9 @@
                                         required />
                                 </td>
                                 <td class="border w-20">
-                                    <input type="number"
+                                    <input type="text"
                                         class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
-                                        type="number"
+                                        type="text"
                                         required
                                         x-model.number="row.unit_no"
                                         x-model="row.unit_no"
