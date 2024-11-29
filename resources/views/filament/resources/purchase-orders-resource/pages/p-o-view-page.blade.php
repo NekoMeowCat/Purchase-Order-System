@@ -48,7 +48,6 @@
                     <span class="uppercase font-medium text-xl">purchase requisition slip</span>
                     <small class="">(amount more than Php 700.00)</small>
                 </section>
-
                 <section class="flex items-center justify-between w-full">
                     <div class="flex items-start">
                         <label for="department" class="font-medium w-[7rem]">Department:</label>
@@ -115,17 +114,66 @@
             </section>
 
             <hr class="w-full my-2 h-1 bg-gray-400">
-
             <section class="grid grid-cols-3 gap-x-2">
-                <span class=" w-full text-sm text-gray-700">Requested By:</span>
-                <span class=" w-full text-sm text-gray-700">Verified By:</span>
-                <span class=" w-full text-sm text-gray-700">Approved By:</span>
-                <span class="border-b-2 border-gray-400 w-full text-sm text-gray-700 text-center mt-10 uppercase font-bold">...</span>
-                <span class="border-b-2 border-gray-400 text-center text-sm text-gray-700 mt-10 uppercase font-bold">...</span>
-                <span class="border-b-2 border-gray-400 text-center text-sm text-gray-700 mt-10 uppercase font-bold">...</span>
-                <span class=" w-full text-sm text-gray-700 text-center">Head of Office</span>
-                <span class=" w-full text-sm text-gray-700 text-center">Comptroller</span>
-                <span class=" w-full text-sm text-gray-700 text-center">VP for Administrative and Student Affairs</span>
+                <span class="w-full text-sm text-gray-700">Requested By:</span>
+                <span class="w-full text-sm text-gray-700">Verified By:</span>
+                <span class="w-full text-sm text-gray-700">Approved By:</span>
+
+                <figure class="border-b-2 border-gray-400 w-full text-sm text-gray-700 text-center mt-2 flex items-end">
+                    <figcaption class="block mt-4 items-center justify-center w-full">
+                        <picture class="text-center">
+                            @if ($signatureUrl)
+                            <img src="{{ $signatureUrl }}"
+                                alt="Authorized Signature"
+                                class="inline-block max-w-[150px] h-12 object-contain mb-0">
+                            @else
+                            <span class="text-gray-500">No signature available.</span>
+                            @endif
+                        </picture>
+                        <strong class="uppercase font-bold text-center block mt-0">
+                            {{ $userName }}
+                        </strong>
+                    </figcaption>
+                </figure>
+
+                <figure class="border-b-2 border-gray-400 w-full text-sm text-gray-700 text-center mt-2 flex items-end">
+                    <figcaption class="block mt-4 items-center justify-center w-full">
+                        <picture class="text-center">
+                            @if ($comptrollerSignatureUrl)
+                            <img src="{{ $comptrollerSignatureUrl }}"
+                                alt="Comptroller Signature"
+                                class="inline-block max-w-[150px] h-12 object-contain">
+                            @else
+                            <span class="text-gray-500">No signature available.</span>
+                            @endif
+                        </picture>
+                        <strong class="uppercase font-bold text-center block">
+                            {{ $comptrollerName }}
+                        </strong>
+                    </figcaption>
+                </figure>
+
+                <figure class="border-b-2 border-gray-400 w-full text-sm text-gray-700 text-center mt-2 flex items-end">
+                    <figcaption class="block mt-4 items-center justify-center w-full">
+                        <picture class="flex items-end w-full justify-center">
+                            @if ($vpSignatureUrl)
+                            <img src="{{ $vpSignatureUrl }}"
+                                alt="Vice President Signature"
+                                class="inline-block max-w-[150px] h-12 object-contain">
+                            @else
+                            <span class="text-gray-500">No signature available.</span>
+                            @endif
+                        </picture>
+                        <strong class="uppercase font-bold text-center block">
+                            {{ $vpName }}
+                        </strong>
+                    </figcaption>
+                </figure>
+
+                <!-- Titles -->
+                <span class="w-full text-sm text-gray-700 text-center">Head of Office</span>
+                <span class="w-full text-sm text-gray-700 text-center">Comptroller</span>
+                <span class="w-full text-sm text-gray-700 text-center">VP for Administrative and Student Affairs</span>
             </section>
 
         </main>
