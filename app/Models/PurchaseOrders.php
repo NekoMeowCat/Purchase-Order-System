@@ -33,6 +33,7 @@ class PurchaseOrders extends ApprovableModel
         'pr_number',
         'over_all_total',
         'prs_date',
+        'user_id',
         'date_required',
         'comment',
         'rejected_by',
@@ -49,8 +50,6 @@ class PurchaseOrders extends ApprovableModel
     {
         return $this->belongsTo(Suppliers::class);
     }
-
-
 
     public function purchaseOrderItems()
     {

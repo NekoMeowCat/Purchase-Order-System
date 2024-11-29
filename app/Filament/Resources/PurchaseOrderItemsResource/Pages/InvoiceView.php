@@ -6,6 +6,9 @@ use App\Filament\Resources\PurchaseOrderItemsResource;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PurchaseOrderItems;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class InvoiceView extends ViewRecord
 {
@@ -15,27 +18,55 @@ class InvoiceView extends ViewRecord
     protected static ?string $title = 'Purchase Order';
     protected ?string $heading = ' ';
 
-    public $departmentName;
     public $prNumber;
+    public $relatedItems;
+    public ?string $directorPmoName = null;
+    public ?string $directorPmoSignature = null;
+    public ?string $comptrollerName = null;
+    public ?string $comptrollerSignature = null;
+    public ?string $vpName = null;
+    public ?string $vpSignature = null;
+    public ?string $prsDate = null;
 
     public function getRecord(): Model
     {
         $record = parent::getRecord();
 
-        $record = $record->load('supplier', 'purchaseOrder.department');
+        // Eager load 'supplier' and 'purchaseOrder'
+        $record = $record->load('supplier', 'purchaseOrder');
 
         // Fetch related items
-        $relatedItems = $record->newQuery()
+        $this->relatedItems = $record->newQuery()
             ->where('po_number', $record->po_number)
-            ->with('supplier', 'purchaseOrder.department')
+            ->with('supplier', 'purchaseOrder')
             ->get();
 
-        $record->related_items = $relatedItems;
+        $record->related_items = $this->relatedItems;
 
-        // Fetch department name and pr_number
+        // Fetch pr_number and prs_date
         $purchaseOrder = $record->purchaseOrder;
-        $this->departmentName = $purchaseOrder ? $purchaseOrder->department->name : 'N/A';
         $this->prNumber = $purchaseOrder ? $purchaseOrder->pr_number : 'N/A';
+        $this->prsDate = $purchaseOrder && $purchaseOrder->prs_date
+            ? Carbon::parse($purchaseOrder->prs_date)
+            : null;
+
+        // Fetch Director, PMO
+        $directorPmo = User::where('position', 'Director, PMO')->first();
+        $this->directorPmoName = $directorPmo?->name ?? 'N/A';
+        $this->directorPmoSignature = $directorPmo?->signature ? Storage::url($directorPmo->signature) : null;
+
+        // Fetch Comptroller
+        $comptroller = User::where('position', 'Comptroller')->first();
+        $this->comptrollerName = $comptroller?->name ?? 'N/A';
+        $this->comptrollerSignature = $comptroller?->signature ? Storage::url($comptroller->signature) : null;
+
+        // Fetch Vice President in Administrative and Student Affairs
+        $vp = User::where('position', 'Vice President')
+            ->whereHas('department', function ($query) {
+                $query->where('name', 'Administrative and Student Affairs');
+            })->first();
+        $this->vpName = $vp?->name ?? 'N/A';
+        $this->vpSignature = $vp?->signature ? Storage::url($vp->signature) : null;
 
         return $record;
     }

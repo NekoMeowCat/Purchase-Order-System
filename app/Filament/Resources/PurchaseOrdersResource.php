@@ -105,7 +105,7 @@ class PurchaseOrdersResource extends Resource
                         ->icon('heroicon-s-paper-clip')
                         ->color('warning')
                         ->visible(
-                            fn(PurchaseOrders $record) => (auth()->user()->position === 'Dean' || auth()->user()->position === 'Admin') &&
+                            fn(PurchaseOrders $record) => auth()->user()->position !== 'Student Assistant' &&
                                 is_null($record->attachments)
                         )
                         ->form([

@@ -29,6 +29,15 @@ class PurchaseOrderItems extends Model
     {
         return $this->belongsTo(PurchaseOrders::class, 'prs_id', 'id');
     }
+    public function department()
+    {
+        return $this->belongsTo(Departments::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'prs_id', 'id');
+    }
 
     public function supplier()
     {

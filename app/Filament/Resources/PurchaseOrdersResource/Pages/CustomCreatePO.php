@@ -103,6 +103,7 @@ class CustomCreatePO extends Page implements HasForms
                 'payee' => $this->payee,
                 'department' => auth()->user()->department->name,
                 'date_required' => $row['date_required'],
+                'user_id' => auth()->id(),
             ]);
         }
 

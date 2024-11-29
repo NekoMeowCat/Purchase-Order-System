@@ -98,16 +98,18 @@
         </section>
         <section class="flex space-x-2">
             <span class="">Requested Office/Department:</span>
-            <span class="w-[15rem] border-b-2">{{ $departmentName }}</span>
+            <span class="w-[15rem] border-b-2"> {{ $record->purchaseOrder->department ?? 'N/A' }}</span>
         </section>
         <section class="flex justify-evenly space-x-4">
             <div class="w-full flex">
                 <span class="w-[5rem]">PRS No:</span>
-                <span class="border-b-2 w-full">{{ $prNumber }}</span>
+                <span class="border-b-2 w-full text-sm">{{ $prNumber }}</span>
             </div>
-            <div class="w-full flex">
+            <div class="flex items-center">
                 <span class="w-[3rem]">Date:</span>
-                <span class="border-b-2 w-full"></span>
+                <span class="text-sm text-gray-700 w-[10rem] border-b-2">
+                    {{ \Carbon\Carbon::parse($prsDate)->format('F j, Y') }}
+                </span>
             </div>
             <div class="w-full flex">
                 <span class="border-b-2 w-full"></span>
@@ -116,23 +118,39 @@
         <small class="flex justify-end">
             <span class="mx-[4rem]">SUPPLIER (Signature over Printed Name)</span>
         </small>
-        <section class="w-full flex justify-evenly space-x-4">
-            <span class="capitalize w-full">prepared by:</span>
-            <span class="capitalize w-full">certified funds available:</span>
-            <span class="capitalize w-full">approved by:</span>
-        </section>
-        <section class="flex justify-evenly space-x-4 mt-8">
+        <section class="w-full flex justify-evenly space-x-4 mt-8">
             <div class="block w-full">
-                <div class=""></div>
+                <div class="text-center">
+                    @if($directorPmoSignature)
+                    <img src="{{ $directorPmoSignature }}" alt="Director, PMO Signature" class="mx-auto h-16">
+                    @else
+                    <div class="text-sm text-gray-700">Signature not available</div>
+                    @endif
+                    <span class="text-sm text-gray-700">{{ $directorPmoName }}</span>
+                </div>
                 <div class="text-center border-t-2">Director, PMO</div>
             </div>
             <div class="block w-full">
-                <div an class=""></div>
+                <div class="text-center">
+                    @if($comptrollerSignature)
+                    <img src="{{ $comptrollerSignature }}" alt="Comptroller Signature" class="mx-auto h-16">
+                    @else
+                    <div class="text-sm text-gray-700">Signature not available</div>
+                    @endif
+                    <span class="text-sm text-gray-700">{{ $comptrollerName }}</span>
+                </div>
                 <div class="text-center border-t-2">Comptroller</div>
             </div>
             <div class="block w-full">
-                <div class=""></div>
-                <div class="text-center border-t-2">VP for Administrative and Students Affair</div>
+                <div class="text-center ">
+                    @if($vpSignature)
+                    <img src="{{ $vpSignature }}" alt="Vice President Signature" class="mx-auto h-16 ">
+                    @else
+                    <div class="text-sm text-gray-700 mb-1">Signature not available</div>
+                    @endif
+                    <span class="text-sm text-gray-700 ">{{ $vpName }}</span>
+                </div>
+                <div class="text-center border-t-2">VP for Administrative and Student Affairs</div>
             </div>
         </section>
     </main>
