@@ -49,7 +49,6 @@ class AdminPanelProvider extends PanelProvider
                     ->setNavigationGroup('Group Profile')
                     ->setIcon('heroicon-o-user')
                     ->setSort(10)
-                    ->canAccess(fn() => auth()->user()->id === 1)
                     ->shouldRegisterNavigation(false)
                     ->shouldShowDeleteAccountForm(false)
                     ->shouldShowAvatarForm(
@@ -74,6 +73,11 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                \App\Filament\Widgets\StatWidget::class,
+                \App\Filament\Widgets\CompletedPurchaseOrdersChart::class,
+                \App\Filament\Widgets\PurchaseOrderItemStatusGraph::class,
+
+
             ])
             ->middleware([
                 EncryptCookies::class,
