@@ -105,7 +105,9 @@ class PurchaseOrdersResource extends Resource
                         ->icon('heroicon-s-paper-clip')
                         ->color('warning')
                         ->visible(
-                            fn(PurchaseOrders $record) => auth()->user()->position !== 'Student Assistant' &&
+                            fn(PurchaseOrders $record) =>
+                            auth()->user()->position !== 'Student Assistant' &&
+                                auth()->user()->department->name === $record->department &&
                                 is_null($record->attachments)
                         )
                         ->form([
@@ -132,11 +134,9 @@ class PurchaseOrdersResource extends Resource
                         ->color('info')
                         ->visible(
                             fn(PurchaseOrders $record) =>
-                            $record->isApprovalCompleted() &&
-                                !$record->items_saved &&
-                                !\App\Models\PurchaseOrders::where('pr_number', $record->pr_number)
-                                    ->where('items_saved', 1)
-                                    ->exists()
+                            auth()->user()->hasRole('PMO') &&
+                                $record->isApprovalCompleted() &&
+                                $record->items_saved == 0
                         )
                         ->requiresConfirmation()
                         ->action(function (PurchaseOrders $record) {
