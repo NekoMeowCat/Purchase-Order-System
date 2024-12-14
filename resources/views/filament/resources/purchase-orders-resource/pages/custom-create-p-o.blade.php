@@ -1,12 +1,16 @@
 <x-filament-panels::page>
     @vite('resources/css/app.css')
     <main class="min-w-full mx-auto bg-white shadow-lg p-6 rounded-sm">
-        <section class="flex flex-col items-center w-full mb-4">
-            <span class="capitalize font-medium text-xl">fr. saturnino urios university</span>
-            <span class="capitalize">butuan city</span>
-        </section>
-        <!-- Form to wrap the inputs and handle submission -->
-        <form wire:submit.prevent="save">
+        <form wire:submit.prevent="save" enctype="multipart/form-data">
+            <section class="grid grid-cols-3 items-center w-full mb-4">
+                <div class="col-span-1">
+                    <input type="file" id="canvass_form" wire:model="canvass_form" class="px-2 py-1 border-none rounded w-full">
+                </div>
+                <div class="col-span-1 flex flex-col items-center">
+                    <span class="capitalize font-medium text-xl">fr. saturnino urios university</span>
+                    <span class="capitalize">butuan city</span>
+                </div>
+            </section>
             <div class="flex items-end justify-end w-full">
                 <span class="flex items-center justify-end space-x-2">
                     <label for="pr_number" class="text-sm font-medium text-gray-700 w-10">PR #</label>
@@ -32,26 +36,34 @@
                         class="block w-[34rem] py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                         readonly>
                 </div>
-
                 <span class="flex items-center space-x-2">
                     <label for="prs_date" class="text-sm font-medium text-gray-700 uppercase">Date</label>
                     <input
                         type="date"
                         id="prs_date"
-                        x-model.number="row.prs_date"
-                        wire:model.defer="rows[index].prs_date"
-                        class="block w-[10rem] py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                        value="{{ date('Y-m-d') }}"
+                        class="block w-[10rem] py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                        readonly>
                 </span>
             </div>
 
             <div class="flex items-center space-x-2">
                 <label for="budget_code" class="text-sm font-medium text-gray-700 w-[10rem] uppercase">budget code:</label>
-                <input
-                    type="text"
+                <select
                     id="budget_code"
-                    x-model.number="row.budget_code"
                     wire:model.defer="budget_code"
                     class="block w-1/2 py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                    <option value="">Select a budget code</option>
+                    <option value="Instructional Development Program">Instructional Development Program</option>
+                    <option value="Seminar & Conferences">Seminar & Conferences</option>
+                    <option value="Student Development Program">Student Development Program</option>
+                    <option value="Office Expenses">Office Expenses</option>
+                    <option value="Meetings">Meetings</option>
+                    <option value="Repairs and Maintenance">Repairs and Maintenance</option>
+                    <option value="Postage">Postage</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Capital Assets">Capital Assets</option>
+                </select>
             </div>
             <div class="flex items-center space-x-2">
                 <label for="budget_code" class="text-sm font-medium text-gray-700 w-[10rem] uppercase">purpose:</label>
@@ -118,13 +130,18 @@
                                         required />
                                 </td>
                                 <td class="border w-20">
-                                    <input type="text"
-                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200"
-                                        type="text"
+                                    <select
+                                        class="border-0 border-gray-300 rounded-sm p-1 w-full focus:outline-none focus:ring-0 focus:ring-blue-200 text-xs appearance-none"
                                         required
-                                        x-model.number="row.unit_no"
                                         x-model="row.unit_no"
-                                        wire:model.defer="rows[index].unit_no" />
+                                        wire:model.defer="rows[index].unit_no">
+                                        <option value=""></option>
+                                        <option value="pc">Piece</option>
+                                        <option value="box">Box</option>
+                                        <option value="kg">Kilogram</option>
+                                        <option value="m">Meter</option>
+                                        <option value="l">Liter</option>
+                                    </select>
                                 </td>
                                 <td class="border w-[30rem]">
                                     <input type="text"
@@ -213,7 +230,7 @@
             <!-- Submit Button -->
             <div class="flex justify-end mt-4">
                 <x-filament::button type="submit" class="text-white">
-                    Submit
+                    Save
                 </x-filament::button>
             </div>
         </form>

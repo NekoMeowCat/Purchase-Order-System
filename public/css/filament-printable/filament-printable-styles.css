@@ -1,0 +1,25 @@
+@media print {
+    body {
+        zoom: 92%;
+    }
+
+    .fi-topbar,
+    .fi-breadcrumbs-item-label,
+    /* .fi-header-heading, */
+    .fi-breadcrumbs-item-separator,
+    .fi-btn,
+    .fi-input,
+    .fi-input-wrp-icon,
+    .fi-input-wrp,
+    .fi-pagination,
+    .fi-ta-header-toolbar,
+    .fi-ta-header-toolbar-actions,
+    .fi-checkbox-input {
+        display: none !important;
+    }
+
+    /* Commented out the pagination hiding to prevent empty first page */
+    /* .fi-ta-pagination {
+        display: none !important;
+    } */
+}

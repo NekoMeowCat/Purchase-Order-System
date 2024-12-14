@@ -122,8 +122,8 @@
                 <figure class="border-b-2 border-gray-400 w-full text-sm text-gray-700 text-center mt-2 flex items-end">
                     <figcaption class="block mt-4 items-center justify-center w-full">
                         <picture class="text-center">
-                            @if ($signatureUrl)
-                            <img src="{{ $signatureUrl }}"
+                            @if($this->headSignatureUrl)
+                            <img src="{{ $this->headSignatureUrl }}"
                                 alt="Authorized Signature"
                                 class="inline-block max-w-[150px] h-12 object-contain mb-0">
                             @else

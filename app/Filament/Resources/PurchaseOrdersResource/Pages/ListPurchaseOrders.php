@@ -6,6 +6,7 @@ use App\Filament\Resources\PurchaseOrdersResource;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
+use ArielMejiaDev\FilamentPrintable\Actions\PrintAction;
 
 class ListPurchaseOrders extends ListRecords
 {
@@ -19,7 +20,9 @@ class ListPurchaseOrders extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            PrintAction::make()
+                ->visible(fn() => auth()->user()->department && in_array(auth()->user()->department->name, ['Finance', 'VPASA', 'PMO'])),
+            Actions\CreateAction::make()
         ];
     }
 }

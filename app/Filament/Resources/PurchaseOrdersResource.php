@@ -5,17 +5,34 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PurchaseOrdersResource\Pages;
 use App\Filament\Resources\PurchaseOrdersResource\RelationManagers;
 use App\Models\PurchaseOrders;
-use App\Models\PurchaseOrderItems; // Import the model for purchase order items
+// use App\Models\PurchaseOrderItems; 
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Notifications\Notification;
+use Filament\Tables\Actions\Action;
+use App\Models\PurchaseOrder;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class PurchaseOrdersResource extends Resource
+
+class PurchaseOrdersResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = PurchaseOrders::class;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            // 'delete',
+            // 'delete_any',
+            // 'publish'
+        ];
+    }
 
     protected static ?string $navigationLabel = 'Purchase Request';
 
@@ -59,26 +76,21 @@ class PurchaseOrdersResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('unit_no')
-                    ->label('Unit')
+                Tables\Columns\TextColumn::make('department')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('prs_date')
+                    ->label('Date')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('pr_number')
-                    ->label('Purchase Number')
+                    ->label('PR #')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('budget_code')
                     ->label('Budget Code')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('prs_date')
-                    ->label('Purchase Date')
+                Tables\Columns\TextColumn::make('unit_no')
+                    ->label('Unit'),
+                Tables\Columns\TextColumn::make('total')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('prs_date')
-                    ->label('Purchase Date')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('prs_date')
-                    ->label('Purchase Date')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('amount'),
-                Tables\Columns\TextColumn::make('total'),
                 \EightyNine\Approvals\Tables\Columns\ApprovalStatusColumn::make("approvalStatus.status"),
             ])
             ->defaultSort('created_at', 'desc')
@@ -100,34 +112,6 @@ class PurchaseOrdersResource extends Resource
                     ]
                 ),
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\Action::make('upload_files')
-                        ->label('Add Attachments')
-                        ->icon('heroicon-s-paper-clip')
-                        ->color('warning')
-                        ->visible(
-                            fn(PurchaseOrders $record) =>
-                            auth()->user()->position !== 'Student Assistant' &&
-                                auth()->user()->department->name === $record->department &&
-                                is_null($record->attachments)
-                        )
-                        ->form([
-                            Forms\Components\FileUpload::make('attachments')
-                                ->label('Attachments')
-                                ->multiple()
-                                ->directory('purchase-orders')
-                                ->preserveFilenames()
-                                ->acceptedFileTypes(['application/pdf', 'image/*'])
-                                ->maxSize(5120)
-                        ])
-                        ->action(function (PurchaseOrders $record, array $data): void {
-                            $record->attachments = $data['attachments'];
-                            $record->save();
-
-                            Notification::make()
-                                ->title('Files uploaded successfully')
-                                ->success()
-                                ->send();
-                        }),
                     Tables\Actions\Action::make('save_to_items')
                         ->label('Save to Items')
                         ->icon('heroicon-s-bookmark')
@@ -151,21 +135,8 @@ class PurchaseOrdersResource extends Resource
                                 ->success()
                                 ->send();
                         }),
-
-                    // Tables\Actions\ViewAction::make()
-                    //     ->label('View Invoice')
-                    //     ->icon('heroicon-s-document-duplicate')
-                    //     ->color('success')
-                    //     ->visible(
-                    //         fn(PurchaseOrders $record) =>
-                    //         $record->isApprovalCompleted() && $record->items_saved && !empty($record->po_number)
-                    //     )
-                    //     ->url(
-                    //         fn(PurchaseOrders $record) =>
-                    //         route('filament.admin.pages.purchase-invoice.custom', ['po_number' => $record->po_number])
-                    //     )
-                    //     ->openUrlInNewTab(),
                 ]),
+
             ])
 
             ->bulkActions([

@@ -2,19 +2,33 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Forms;
+use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\Suppliers;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Section;
 use App\Filament\Resources\SuppliersResource\Pages;
 use App\Filament\Resources\SuppliersResource\RelationManagers;
-use App\Models\Suppliers;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\Section;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class SuppliersResource extends Resource
+class SuppliersResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Suppliers::class;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            // 'delete',
+            // 'delete_any',
+            // 'publish'
+        ];
+    }
 
     protected static ?string $navigationIcon = 'heroicon-s-user-group';
 

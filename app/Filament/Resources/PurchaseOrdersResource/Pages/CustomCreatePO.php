@@ -12,10 +12,13 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Carbon\Carbon;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
 
 class CustomCreatePO extends Page implements HasForms
 {
     use InteractsWithForms;
+    use WithFileUploads;
 
     protected ?string $heading = 'Purchase Request';
     protected static ?string $breadcrumb = "PRS";
@@ -34,6 +37,7 @@ class CustomCreatePO extends Page implements HasForms
     public $budget_code;
     public $purpose;
     public $payee;
+    public $canvass_form;
 
     public function mount(): void
     {
@@ -88,6 +92,34 @@ class CustomCreatePO extends Page implements HasForms
         // dd($department);
         $over_all_total = collect($data)->sum('total');
 
+        // Handle file upload
+        if ($this->canvass_form) {
+            try {
+                $filename = $this->pr_number . '_' . time() . '.' . $this->canvass_form->getClientOriginalExtension();
+                $path = $this->canvass_form->storeAs('canvass_forms', $filename, 'public');
+                
+                // Add notification for successful upload
+                Notification::make()
+                    ->title('File uploaded successfully')
+                    ->success()
+                    ->send();
+            } catch (\Exception $e) {
+                // Add error notification
+                Notification::make()
+                    ->title('File upload failed')
+                    ->body($e->getMessage())
+                    ->danger()
+                    ->send();
+                return;
+            }
+        } else {
+            // Debug notification
+            Notification::make()
+                ->title('No file detected')
+                ->warning()
+                ->send();
+        }
+
         foreach ($data as $row) {
             PurchaseOrders::create([
                 'quantity' => $row['quantity'],
@@ -96,7 +128,7 @@ class CustomCreatePO extends Page implements HasForms
                 'amount' => $row['amount'],
                 'total' => $row['total'],
                 'over_all_total' => $over_all_total,
-                'prs_date' => $prs_date,
+                'prs_date' => Carbon::today()->toDateString(),
                 'pr_number' => $this->pr_number,
                 'budget_code' => $this->budget_code,
                 'purpose' => $this->purpose,
@@ -104,6 +136,7 @@ class CustomCreatePO extends Page implements HasForms
                 'department' => auth()->user()->department->name,
                 'date_required' => $row['date_required'],
                 'user_id' => auth()->id(),
+                'canvass_form' => $path ?? null,
             ]);
         }
 

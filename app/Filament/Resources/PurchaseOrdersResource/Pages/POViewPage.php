@@ -20,12 +20,12 @@ class POViewPage extends Page
     public Collection $purchaseOrders;
     public string $supplierName;
     public string $createdAt;
-    public ?string $signatureUrl = null;
     public string $userName;
     public ?string $comptrollerSignatureUrl = null;
     public ?string $comptrollerName = null;
     public ?string $vpSignatureUrl = null;
     public ?string $vpName = null;
+    public ?string $headSignatureUrl = null;
 
     public function mount(Request $request): void
     {
@@ -37,19 +37,10 @@ class POViewPage extends Page
 
         $firstOrder = $this->purchaseOrders->first();
 
-        // Debug line to check data
-        // dd($firstOrder->toArray());
-
         $this->supplierName = $firstOrder->supplier->name ?? 'N/A';
         $this->createdAt = $firstOrder->created_at->format('F j, Y') ?? 'N/A';
         $this->userName = $firstOrder->user->name ?? 'N/A';
-
-        // Get user signature if available
-        $this->signatureUrl = $firstOrder->user?->signature
-            ? Storage::url($firstOrder->user->signature)
-            : null;
-
-        // Get comptroller details - make sure this runs
+        $this->headSignatureUrl = Storage::url($firstOrder->head_signature) ?? null;
         $comptroller = User::where('position', 'Comptroller')->first();
         $this->comptrollerName = $comptroller?->name ?? 'N/A';
         $this->comptrollerSignatureUrl = $comptroller?->signature

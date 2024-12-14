@@ -125,14 +125,13 @@ class EditPO extends EditRecord
         DB::beginTransaction();
 
         try {
-            PurchaseOrderItems::where('po_number', $this->po_number)->delete();
-
-            PurchaseOrderItems::where('prs_id', $this->record->purchaseOrder->id)
-                ->where('is_edited', 0)
-                ->delete();
-
             foreach ($this->rows as $row) {
-                PurchaseOrderItems::create([
+                // Find existing PO item or create new one
+                $poItem = PurchaseOrderItems::where('po_number', $this->po_number)
+                    ->where('description', $row['description'])
+                    ->first();
+
+                $data = [
                     'prs_id' => $this->record->purchaseOrder->id,
                     'supplier_id' => $this->supplier_id,
                     'po_number' => $this->po_number,
@@ -145,7 +144,15 @@ class EditPO extends EditRecord
                     'date_required' => $this->date_required,
                     'is_edited' => 1,
                     'status' => $this->status,
-                ]);
+                ];
+
+                if ($poItem) {
+                    // Update existing record
+                    $poItem->update($data);
+                } else {
+                    // Create new record
+                    PurchaseOrderItems::create($data);
+                }
             }
 
             DB::commit();

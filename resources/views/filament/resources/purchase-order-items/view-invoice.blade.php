@@ -126,7 +126,7 @@
                     @else
                     <div class="text-sm text-gray-700">Signature not available</div>
                     @endif
-                    <span class="text-sm text-gray-700">{{ $directorPmoName }}</span>
+                    <span class="text-sm text-gray-700">{{ $directorPmoName}}</span>
                 </div>
                 <div class="text-center border-t-2">Director, PMO</div>
             </div>

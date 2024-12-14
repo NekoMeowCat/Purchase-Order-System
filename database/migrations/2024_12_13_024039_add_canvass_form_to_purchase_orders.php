@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // $table->foreignId('department_id')->nullable()->constrained()->onDelete('cascade');
+        Schema::table('purchase_orders', function (Blueprint $table) {
+            $table->string('canvass_form')->nullable();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('purchase_orders', function (Blueprint $table) {
             //
         });
     }

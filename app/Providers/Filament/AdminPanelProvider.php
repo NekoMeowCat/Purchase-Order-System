@@ -21,6 +21,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin;
+use Filament\View\PanelsRenderHook;
+
 
 
 class AdminPanelProvider extends PanelProvider
@@ -37,10 +39,16 @@ class AdminPanelProvider extends PanelProvider
             // ->brandLogo(asset('images/logo.jpg'))
             // ->brandLogoHeight('3rem')
             // ->profile()
+            ->renderHook(
+                // This line tells us where to render it
+                'panels::body.end',
+                // This is the view that will be rendered
+                fn() => view('footer'),
+            )
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-                FilamentThemeInspectorPlugin::make()
-                    ->disabled(fn() => ! app()->hasDebugModeEnabled()),
+                // FilamentThemeInspectorPlugin::make()
+                //     ->disabled(fn() => ! app()->hasDebugModeEnabled()),
                 \EightyNine\Approvals\ApprovalPlugin::make(),
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
@@ -71,8 +79,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
                 \App\Filament\Widgets\StatWidget::class,
                 \App\Filament\Widgets\CompletedPurchaseOrdersChart::class,
                 \App\Filament\Widgets\PurchaseOrderItemStatusGraph::class,
