@@ -125,35 +125,21 @@ class EditPO extends EditRecord
         DB::beginTransaction();
 
         try {
-            foreach ($this->rows as $row) {
-                // Find existing PO item or create new one
-                $poItem = PurchaseOrderItems::where('po_number', $this->po_number)
-                    ->where('description', $row['description'])
-                    ->first();
-
-                $data = [
-                    'prs_id' => $this->record->purchaseOrder->id,
-                    'supplier_id' => $this->supplier_id,
-                    'po_number' => $this->po_number,
-                    'po_date' => $this->currentDate,
-                    'quantity' => $row['quantity'],
-                    'description' => $row['description'],
-                    'price' => $row['price'],
-                    'amount' => $row['amount'],
-                    'total_amount' => $this->total_amount,
-                    'date_required' => $this->date_required,
-                    'is_edited' => 1,
-                    'status' => $this->status,
-                ];
-
-                if ($poItem) {
-                    // Update existing record
-                    $poItem->update($data);
-                } else {
-                    // Create new record
-                    PurchaseOrderItems::create($data);
-                }
-            }
+            // Update the current record
+            $this->record->update([
+                'prs_id' => $this->record->purchaseOrder->id,
+                'supplier_id' => $this->supplier_id,
+                'po_number' => $this->po_number,
+                'po_date' => $this->currentDate,
+                'quantity' => $this->rows[0]['quantity'],
+                'description' => $this->rows[0]['description'],
+                'price' => $this->rows[0]['price'],
+                'amount' => $this->rows[0]['amount'],
+                'total_amount' => $this->total_amount,
+                'date_required' => $this->date_required,
+                'is_edited' => 1,
+                'status' => $this->status,
+            ]);
 
             DB::commit();
             Notification::make()
