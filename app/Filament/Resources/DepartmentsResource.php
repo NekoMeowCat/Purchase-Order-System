@@ -2,21 +2,35 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DepartmentsResource\Pages;
-use App\Filament\Resources\DepartmentsResource\RelationManagers;
-use App\Models\Departments;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Departments;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use App\Filament\Resources\DepartmentsResource\Pages;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+use App\Filament\Resources\DepartmentsResource\RelationManagers;
 
 
-class DepartmentsResource extends Resource
+class DepartmentsResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Departments::class;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            // 'delete',
+            // 'delete_any',
+            // 'publish'
+        ];
+    }
 
     protected static ?string $navigationIcon = 'heroicon-s-home-modern';
 
@@ -46,7 +60,6 @@ class DepartmentsResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('userInCharge.name')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
@@ -66,6 +79,8 @@ class DepartmentsResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
                         ->color('warning'),
+                    Tables\Actions\DeleteAction::make()
+                        ->color('danger'),
                 ])
             ])
             ->bulkActions([

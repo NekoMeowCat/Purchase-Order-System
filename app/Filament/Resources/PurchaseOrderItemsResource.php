@@ -2,22 +2,32 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PurchaseOrderItemsResource\Pages;
-use App\Filament\Resources\PurchaseOrderItemsResource\RelationManagers;
-use App\Models\PurchaseOrderItems;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\PurchaseOrders;
+use Filament\Resources\Resource;
+use App\Models\PurchaseOrderItems;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PurchaseOrderItemsResource\Pages;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+use App\Filament\Resources\PurchaseOrderItemsResource\RelationManagers;
+use EightyNine\Approvals\Tables\Actions\ApprovalActions;
 
-
-
-class PurchaseOrderItemsResource extends Resource
+class PurchaseOrderItemsResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = PurchaseOrderItems::class;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+        ];
+    }
 
     protected static ?string $navigationIcon = 'heroicon-s-arrow-path-rounded-square';
 
@@ -58,6 +68,8 @@ class PurchaseOrderItemsResource extends Resource
                 Tables\Columns\TextColumn::make('purchaseOrder.pr_number')
                     ->label('PRS #')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('purchaseOrder.department')
+                    ->label('Department'),
                 Tables\Columns\TextColumn::make('supplier.name')
                     ->label('Supplier')
                     ->searchable(),
@@ -67,11 +79,8 @@ class PurchaseOrderItemsResource extends Resource
                 Tables\Columns\TextColumn::make('po_date')
                     ->label('PO Date')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('amount')
-                    ->numeric()
-                    ->searchable(),
-
                 Tables\Columns\TextColumn::make('total_amount')
+                    ->label('Total')
                     ->numeric()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
@@ -81,24 +90,26 @@ class PurchaseOrderItemsResource extends Resource
                         'Approved' => 'warning',
                         'Out for Delivery' => 'info',
                         'Completed' => 'success',
-                    })
+                    }),
+                // \EightyNine\Approvals\Tables\Columns\ApprovalStatusColumn::make("approvalStatus.status"),
             ])
             ->filters([
                 //
             ])
-            ->recordUrl(function ($record) {
-                // Find the first record with this po_number to get its ID
-                $firstRecord = $record::where('po_number', $record->po_number)->first();
-
-                // Return the URL using the actual record's ID
-                return $firstRecord
-                    ? Pages\InvoiceView::getUrl(['record' => $firstRecord->id])
-                    : null;
-            })
             ->actions([
+                ...\EightyNine\Approvals\Tables\Actions\ApprovalActions::make(
+                    Tables\Actions\Action::make("Done")
+                        ->hidden(),
+                    [
+                        Tables\Actions\EditAction::make()
+                            ->hidden(),
+                        Tables\Actions\ViewAction::make()
+                            ->hidden()
+                    ]
+                ),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make(),
-                    // ->visible(fn($record) => $record->status === 'Pending'),
+                    // ->visible(fn($record) => $record->status == 'Pending'),
                     Tables\Actions\ViewAction::make()
                         ->label('View Invoice')
                         ->icon('heroicon-s-receipt-refund')

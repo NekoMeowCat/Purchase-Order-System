@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use EightyNine\Approvals\Models\ApprovableModel;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PurchaseOrderItems extends Model
+class PurchaseOrderItems extends ApprovableModel
 {
     use HasFactory;
 
@@ -22,7 +23,10 @@ class PurchaseOrderItems extends Model
         'price',
         'amount',
         'total_amount',
-        'date_required'
+        'date_required',
+        'signature_finance',
+        'signature_vpasa',
+        'signature_pmo',
     ];
 
     public function purchaseOrder()

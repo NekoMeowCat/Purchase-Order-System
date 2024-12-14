@@ -37,8 +37,12 @@ class PurchaseOrders extends ApprovableModel
         'date_required',
         'comment',
         'rejected_by',
-        'attachments',
+        'head_signature',
+        'signature_finance',
+        'signature_vpasa',
+        'signature_pmo',
         'department',
+        'canvass_form',
     ];
 
     public function getFormattedDateRequiredAttribute()
@@ -49,6 +53,11 @@ class PurchaseOrders extends ApprovableModel
     public function supplier()
     {
         return $this->belongsTo(Suppliers::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function purchaseOrderItems()

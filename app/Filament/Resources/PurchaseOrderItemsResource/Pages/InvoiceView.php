@@ -53,7 +53,7 @@ class InvoiceView extends ViewRecord
         // Fetch Director, PMO
         $directorPmo = User::where('position', 'Director, PMO')->first();
         $this->directorPmoName = $directorPmo?->name ?? 'N/A';
-        $this->directorPmoSignature = $directorPmo?->signature ? Storage::url($directorPmo->signature) : null;
+        $this->directorPmoSignature = $record->signature_pmo ? Storage::url($record->signature_pmo) : null;
 
         // Fetch Comptroller
         $comptroller = User::where('position', 'Comptroller')->first();

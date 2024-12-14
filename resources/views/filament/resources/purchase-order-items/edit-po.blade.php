@@ -4,8 +4,8 @@
         <span class="flex justify-end items-end">
             <x-filament::input.wrapper>
                 <x-filament::input.select wire:model="status">
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
+                    <!-- <option value="Pending">Pending</option> -->
+                    <option value="Approved" selected>Approved</option>
                     <option value="Out for Delivery">Out for Delivery</option>
                     <option value="Completed">Completed</option>
                 </x-filament::input.select>
